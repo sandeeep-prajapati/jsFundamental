@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Camera Image Capture</title>
+</head>
+<body>
+
+<video id="video" width="640" height="480" autoplay></video>
+<button id="captureButton">Capture Image</button>
+<canvas id="canvas" width="640" height="480"></canvas>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const video = document.getElementById('video');
+    const captureButton = document.getElementById('captureButton');
+    const canvas = document.getElementById('canvas');
+    const context = canvas.getContext('2d');
+
+    // Access the user's camera
+    navigator.mediaDevices.getUserMedia({ video: true })
+        .then(function (stream) {
+            video.srcObject = stream;
+        })
+        .catch(function (error) {
+            console.error('Error accessing the camera: ', error);
+        });
+
+    // Capture image from the video stream
+    captureButton.addEventListener('click', function () {
+        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+        // You can now use the captured image data as needed
+        // For example, you can send it to a server or manipulate it with JavaScript
+        // Here, we'll simply log the Base64 representation of the image
+        const imageData = canvas.toDataURL('image/png');
+        console.log('Captured Image:', imageData);
+    });
+});
+</script>
+
+</body>
+</html>
